@@ -1,0 +1,95 @@
+[MASTER]
+ignore = dashboard.decorators.py, manage.py, dashboard.integration_tests, dashboard.tests, inventoryproject.settings, user.signals,
+ user.migrations.__init__, user.apps, *migrations*.py, settings.py, tests.py, integration_tests.py, decorators.py, apps.py, migrations
+
+[MESSAGES CONTROL]
+disable=
+    E1101,C0115,C0116,C0114,R0903,W0611,W0613,C0412,R1705,R0914,C0411,R0901,W0621,E0213
+[BASIC]
+
+variable-rgx=[a-z_][a-z0-9_]{0,30}$
+
+additional-builtins=
+    _
+[FORMAT]
+
+max-line-length=100
+
+[pylint.checkers]
+enable=
+    invalid-name,
+    line-too-long,
+    duplicate-code,
+    unused-variable,
+    trailing-whitespace,
+    missing-final-newline,
+    line-too-long,
+    not-in-loop,
+    function-redefined,
+    continue-in-finally,
+    duplicate-argument-name,
+    return-in-init,
+    return-outside-function,
+    nonexistent-operator,
+    nonlocal-without-binding,
+    lost-exception,
+    self-assigning-variable,
+    assert-on-string-literal,
+    assert-on-tuple,
+    nan-comparison,
+    dangerous-default-value,
+    duplicate-key,
+    duplicate-value,
+    useless-else-on-loop,
+    pointless-exception-statement,
+    expression-not-assigned,
+    confusing-with-statement,
+    named-expr-without-context,
+    redeclared-assigned-name,
+    unnecessary-pass,
+    pointless-string-statement,
+    pointless-statement,
+    eval-used,
+    exec-used,
+    comparison-of-constants,
+    literal-comparison,
+    comparison-with-itself,
+    disallowed-name,
+    duplicate-bases,
+    no-method-argument,
+    too-many-branches,
+    too-many-return-statements,
+    too-many-statements,
+    bad-indentation,
+    unnecessary-semicolon,
+    too-many-lines,
+    trailing-newlines,
+    superfluous-parens,
+    deprecated-module,
+    import-error,
+    reimported,
+    wildcard-import,
+    multiple-imports,
+    positional-only-arguments-expected,
+    missing-timeout,
+    nested-min-max,
+    chained-comparison,
+    redefined-argument-from-local,
+    inconsistent-return-statements,
+    simplifiable-if-statement,
+    simplifiable-if-expression,
+    no-else-break,
+    too-many-nested-blocks,
+    useless-return,
+    use-sequence-for-iteration,
+    bad-string-format-type,
+    too-few-format-args,
+    bad-format-character,
+    duplicate-string-formatting-argument,
+    redundant-u-string-prefix,
+
+    
+[REPORTS]
+
+output-format=text
+reports=no

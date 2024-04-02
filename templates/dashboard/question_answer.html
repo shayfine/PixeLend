@@ -1,0 +1,33 @@
+{% extends 'partials/base.html' %}
+{% block title %}Question Answer Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="col-md-8" , style="overflow: hidden">
+        <div class="card">
+            <h5 class="card-header">Question:</h5>
+            <p>
+                {%if rented_item.explanation == 0 %}
+                <input name="question" id="question">
+                <button class="btn btn-primary btn-sm ml-2" type="submit" name="send_question_button" value="">Send</button>
+                {%else%}
+                {{rented_item.question}}
+                {%endif%}
+            </p>
+            <h5 class="card-header">Answer:</h5>
+            <p>
+                {%if rented_item.explanation == 1 and user_in_group and rented_item.answer == '0' %}
+               <input name="answer" id="answer">
+                <button class="btn btn-primary btn-sm ml-2" type="submit" name="send_answer_button" value="">Send</button>
+                {%endif%}
+                {%if rented_item.answer != '0' %}
+                {{rented_item.answer}}
+                {%endif%}
+            </p>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

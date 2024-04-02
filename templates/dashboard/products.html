@@ -1,0 +1,84 @@
+{% extends 'partials/base.html' %}
+{% block title %}Item's Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+{% include 'partials/topside.html' %}
+<div class="row my-4">
+    <div class="col-md-4">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="card card-body">
+            <h5>Add New Items</h5>
+            <hr>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input class="btn btn-success btn-block" type="submit" value="Add">
+            </form>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <table class="table bg-white">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Available</th>
+                    <th scope="col">Min Period in days</th>
+                    <th scope="col">Max Period in days</th>
+                    <th scope="col">Minimum Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in product %}
+                <tr>
+                    <td><img src="..\..\..\media\{{product.photo}}" width="120" height="80"></td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.category }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.available }}</td>
+                    <td>{{ product.min_time }}</td>
+                    <td>{{ product.max_time }}</td>
+                    <td>{{ product.min_amount }}</td>
+
+                    {% if product.available > 0 and product.available <= 3  %}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Please notice</strong>, There are only {{product.available}} {{ product.name }} in stock
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    {%elif product.available <= 0 %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Please notice</strong>, {{ product.name }} has run out of stock
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    {% endif %}
+
+                    <td style="text-align: center">
+                        <a class="btn btn-success btn-sm mr-2 btn-block"
+                            href="{% url 'dashboard-products-extended' product.name %}">View</a>
+                        <br>
+                        <a class="btn btn-info btn-sm mr-2 btn-block"
+                            href="{% url 'dashboard-products-edit' product.id %}">Edit</a>
+                        <br>
+                        <a class="btn btn-danger btn-sm mr-2 btn-block"
+                            href="{% url 'dashboard-products-delete' product.id %}">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

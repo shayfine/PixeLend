@@ -1,0 +1,57 @@
+pipeline
+{
+    agent 
+    {
+        docker {
+            image 'python:3.9'
+            args '-u root:root'
+        }
+    }
+    stages 
+    {
+        stage('Build') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }
+        stage('Unit Tests') {
+            steps {
+                sh 'python manage.py test dashboard.tests'
+            }
+        }
+        stage('Integration Tests') {
+            steps { 
+                sh 'python manage.py test dashboard.integration_tests' }
+        }
+        stage('Metric: Pylint'){
+            steps { sh 'pylint --fail-under=8 --recursive=y .'}
+        }
+        stage('Metric: Coverage') {
+            steps {
+                script {
+                    def serverProcess = null
+                    try {
+                        serverProcess = sh(script: 'coverage run --data-file=./OUTFILE manage.py runserver & echo $!', returnStdout: true).trim()
+                        sleep 2
+                        if (serverProcess != null) {
+                            sh "pkill -P ${serverProcess}"
+                        }
+                        sh 'echo "Test Coverage:"'
+                        sh 'coverage report --data-file=./OUTFILE --format=total'
+                    } catch (Exception e) {
+                        error("Error executing command: ${e.getMessage()}")
+                    }
+                }
+            }
+        }
+        stage('Hackathon Unit Tests') {
+            steps {
+                sh 'python manage.py test dashboard.hackathon_unit_tests'
+            }
+        }
+        stage('Hackathon Integration Tests') {
+            steps { 
+                sh 'python manage.py test dashboard.hackathon_integration_tests' }
+        }
+    }
+}

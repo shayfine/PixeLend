@@ -1,0 +1,25 @@
+{% extends 'partials/base.html' %}
+{% block title %}Reserve For Students Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="col-md-8" , style="overflow: hidden">
+        <div class="card">
+            <h5 class="card-header">{{item.name}} Available: {{item.available}}</h5>
+            <h6 class="card-header">Amount needed: 
+                <input type="number" name="amount_needed" min=0  max="{{ item.available }}">
+                <button class="btn btn-info btn-sm ml-2" type="submit" name="under_button" value="">Reserve</button>
+            </br>
+        </br>
+    </br>
+    <a class="btn btn-primary btn-sm"
+    href="{% url 'request-more' item.name %}">Request More</a></td>
+            </h6>
+            
+        </div>
+    </div>
+</form>
+
+{% endblock %}

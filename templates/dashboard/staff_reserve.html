@@ -1,0 +1,41 @@
+{% extends 'partials/base.html' %}
+{% block title %}Reserve Staff Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="col-md-8" , style="overflow: hidden">
+        <div class="card">
+            <h5 class="card-header">Pick a Product:</h5>
+            <table class="table bg-white">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">SN</th>
+                        <th schope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product_item in products %}
+                    <tr>
+                        <td>{{ product_item.name }}</td>
+                        <td>{{ product_item.SN }}</td>
+                        <td>{{product_item.status}}
+
+                        <td style="text-align: center">
+                            {% if product_item.status == 'Available'%}
+                            <input type="hidden" name="product{{ forloop.counter }}" value="{{ product_item.SN }}">
+                            <button class="btn btn-info btn-sm ml-2 btn-block" type="submit" name="submit_button" value="{{ forloop.counter }}">Pick</button>
+                            <br>
+                            {%endif%}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

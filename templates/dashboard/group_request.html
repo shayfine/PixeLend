@@ -1,0 +1,28 @@
+{% extends 'partials/base.html' %}
+{% block title %}Group Requests{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="col-md-8" , style="overflow: hidden">
+        <div class="card">
+            <h5 class="card-header">Select users for your group: </br></h5>
+                <div class="card-body">
+            {% for students in students %} {% if students.username != username_ %}
+            <input type="checkbox" id="{{students.username}}" name="selected_users" value="{{students.username}}">
+            <label for="{{students.username}}">{{students.username}}</label><br>
+            {% endif %} {% endfor %} 
+                </div>
+                <h5 class="card-header">Select duration in days:
+                    <input style="width: 100px;" type="number" id="time_value" name="time_value" min="{{ product.min_time }}" max="{{ product.max_time }}" required placeholder="Duration">
+                    <small class="text-muted">(Minimum Period:{{product.min_time}} Maximum Period:{{product.max_time}} </small>
+                </h5>
+                <div class="card-body">
+            <button class="btn btn-primary" type="submit" name="select_group" value="">Send</button>
+        </div>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

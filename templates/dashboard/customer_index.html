@@ -1,0 +1,248 @@
+{% load crispy_forms_tags %}
+<div style="clear: both;"></div>
+<style>
+  .card {
+    margin-bottom: 60px;
+    align-items: center;
+  }
+</style>
+<div>
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">Existing Requests:</h5>
+      <table class="table bg-white">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Date</th>
+            <th scope="col">Duration in days</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for requests in request_group %}
+          <tr>
+            <td>{{ requests.name }}</td>
+            <td>{{ requests.date }}</td>
+            <td>{{ requests.period }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <h5 class="card-header">Lists:</h5>
+      <table class="table bg-white">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th scope="col">Class</th>
+            <th scope="col">List</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for productlist in productlist %}
+          <tr>
+            <td>{{ productlist.className }}</td>
+            <td>{{ productlist.productList }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="card">
+        <h5 class="card-header">Items in Storage:</h5>
+        <table class="table bg-white">
+          <thead class="bg-dark text-white">
+            <tr>
+              <th scope="col" </th>
+              <th scope="col">Product</th>
+              <th scope="col">Category</th>
+              <th scope="col">Available</th>
+              <th scope="col">Minimum Period in days</th>
+              <th scope="col">Maximum Period in days</th>
+              <th scope="col">Request for Myself</th>
+              <th scope="col">Request As group</th>
+
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in product %}
+            <tr>
+              <td><img src="..\..\..\media\{{product.photo}}" width="120" height="80"></td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.available }}</td>
+              <td>{{ product.min_time }}</td>
+              <td>{{ product.max_time }}</td>
+              <td>
+                {% if product.available > 0 %}
+                <input style="width: 160px;" type="number" id="time_value" name="time_value"
+                  min="{{ product.min_time }}" max="{{ product.max_time }}" placeholder="Duration">
+                <input type="hidden" name="product{{ forloop.counter }}" value="{{ product.name }}">
+                <button class="btn btn-info btn-sm btn-block" type="submit" name="submit_button"
+                  value="{{ forloop.counter }}">Request</button>
+              </td>
+              <td>
+                <a class="btn btn-primary btn-sm ml-2 btn-block" href="{% url 'group-request' product.name 5 %}">Request
+                  As Group</a>
+              </td>
+              {% endif %}
+              {% if product.available == 0 %}
+              Out of stock.
+              </br>
+              Expected Return:
+              {% with early=return_window_now %}
+              {% for rented in rented %}
+              {% if rented.name == product.name %}
+              {% if early > rented.end_time %}
+              {% with early=rented.end_time %}{% endwith %}
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+              {{ early }}
+              {% endwith %}
+              </td>
+            </tr>
+            {% endif %} {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div style="clear: both;"></div>
+      <div type="float: left">
+        <div class="card">
+          <h5 class="card-header">Existing Orders:</h5>
+          <table class="table bg-white">
+            <thead class="bg-dark text-white">
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Status</th>
+                <th scope="col">Faulty</th>
+                <th scope="col">Ordered At</th>
+                <th scope="col">Return By</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rented in rented_group %}
+              <tr>
+                <td>{{ rented.name }}</td>
+                <td>{{ rented.SN }}</td>
+                <td>{{ rented.status }}</td>
+                <td>{{ rented.faulty }}</td>
+                <td>{{ rented.start_time }}</td>
+                <td>{{ rented.end_time }}</td>
+
+
+                <td><a class="btn btn-secondary btn-sm ml-2 btn-block"
+                    href="{% url 'dashboard-question-answer' rented.name rented.SN %}">
+                    {% if rented.answer != '0' %}
+                    See </br> Answer</a>
+                  {% else %}
+                  Ask </br> Question</a>
+                  {% endif%}
+                  <!--</br><input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                <button class="btn btn-info btn-sm ml-2 btn-block" type="submit" name="return_button"
+                  value="{{forloop.counter}}">Return</button>
+                </br>
+                <input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                <button class="btn btn-danger btn-sm ml-2 btn-block" type="submit" name="faulty_button"
+                  value="{{forloop.counter}}">Report Faulty</button>
+                </br>-->
+                  <a class="btn btn-danger btn-sm ml-2 btn-block" href="{% url 'Faults' rented.SN rented.name %}">Report
+                    Faulty</br></a>
+                  </br>
+                  <input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                  <button class="btn btn-info btn-sm ml-2 btn-block" type="submit" name="return_button"
+                    value="{{forloop.counter}}">Return</button>
+                  </br>
+                  <h4>&emsp;&emsp;transfer to another user :</h4>
+                  <style>
+                    .myContainer {
+                      display: flex;
+                      justify-content: space-between;
+                      margin-top: 20px;
+                      margin-bottom: 10px;
+                      margin-left: 20px;
+                    }
+
+                    .transfer_list {
+                      width: 200px;
+                      height: 100px;
+                      background-color: #f2f2f2;
+                      margin-right: 20px;
+
+                      .transfer_button {
+                        width: 200px;
+                        height: 100px;
+                        background-color: #f2f2f2;
+                        margin-right: 20px;
+                      }
+                  </style>
+
+                  <div class="myContainer">
+                    <select name="transfer_list">
+
+                      <option disabled selected value> -- Select User -- </option>
+                      {% for students in students %} {% if students.username != username_ %}
+
+                      <option value="{{students.username}}">{{students.username}}</option>
+                      {% endif %} {% endfor %}
+
+
+                    </select>
+                    </br>
+
+                    </br><input type="hidden" name="product{{ forloop.counter }}"
+                      value="{{ rented.name }};{{ rented.SN }}">
+                    <button class="btn btn-primary btn-sm ml-2 btn-block" type="submit" name="transfer_button"
+                      value="{{forloop.counter}}">Transfer Equipment</button>
+                    </br>
+                  </div>
+
+                </td>
+
+
+
+
+                {% if rented.answer != '0' %}
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>Please notice</strong>, your question on {{rented.name}} {{rented.SN}} has been answered
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                {% endif %}
+                {% if rented.end_time < curr_time %} <div class="alert alert-danger alert-dismissible fade show"
+                  role="alert">
+                  <strong>Hello {{ rented.username }}</strong>, your return time for {{ rented.name }} SN:{{ rented.SN
+                  }}
+                  has passed!
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+        </div>
+        {% elif return_window_now > rented.end_time %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Hello {{ rented.username }}</strong>, please return {{ rented.name }} SN:{{ rented.SN }}, by {{
+          rented.end_time }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        {% endif %}
+
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+      </div>
+  </div>
+</div>
+</form>
+</div>
+</div>

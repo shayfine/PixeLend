@@ -1,0 +1,90 @@
+{% extends 'partials/base.html' %}
+{% block title %}Requests Page{% endblock %}
+
+{% block content %}
+{% include 'partials/topside.html' %}
+
+<div class="row my-4">
+  <div class="col-md-6">
+    <div class="card">
+      <h5 class="card-header">Staff's Table</h5>
+      <table class="table bg-white">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Requested By</th>
+            <th scope="col">Date</th>
+            <th scope="col">Duration in days</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in requests %}
+          {% for user in stafflist %}
+          {% if user.username == request.username %}
+          <tr>
+            <td>{{ request.name }}</td>
+            <td>{{ request.username }}</td>
+            <td>{{ request.date }}</td>
+            <td>{{ request.period }}</td>
+            <td>
+              <a class="btn btn-info btn-sm mr-2 btn-block"
+                href="{% url 'dashboard-request-approve' request.name request.username request.period %}">
+                Approve
+              </a>
+              <a class="btn btn-danger btn-sm mr-2 btn-block"
+                href="{% url 'deny' request.name request.username request.date request.period %}">
+                Deny
+              </a>
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card">
+      <h5 class="card-header">Student's Table:</h5>
+      <table class="table bg-white">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Requested By</th>
+            <th scope="col">Date</th>
+            <th scope="col">Duration in days</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for request in requests %}
+          {% for user in studentlist %}
+          {% if user.username == request.username %}
+          <tr>
+            <td>{{ request.name }}</td>
+            <td>{{ request.username }}</td>
+            <td>{{ request.date }}</td>
+            <td>{{ request.period }}</td>
+            <td>
+              <a class="btn btn-info btn-sm mr-2 btn-block"
+                href="{% url 'dashboard-request-approve' request.name request.username request.period %}">
+                Approve
+              </a>
+              <a class="btn btn-danger btn-sm mr-2 btn-block"
+                href="{% url 'deny' request.name request.username request.date request.period %}">
+                Deny
+              </a>
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

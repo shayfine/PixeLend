@@ -1,0 +1,33 @@
+{% extends 'partials/base.html' %}
+{% block title %}Stock Requests Page{% endblock %}
+
+
+{% block content %}
+{% include 'partials/topside.html' %}
+
+<div class="row my-4">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        <table class="table bg-white">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for stock in stock %}
+                <tr>
+                    <td>{{ stock.name }}</td>
+                    <td>{{ stock.quantity }}</td>
+                    <td>
+                        <a class="btn btn-danger btn-sm"
+                        href="{% url 'deny-stock-request' stock.name stock.quantity %}">Close</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

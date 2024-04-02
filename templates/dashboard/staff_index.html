@@ -1,0 +1,186 @@
+{% load crispy_forms_tags %}
+<div style="clear: both;"></div>
+<style>
+  .card {
+    margin-bottom: 60px;
+    align-items: center;
+  }
+</style>
+</style>
+<div>
+  <div class="col-md-12" , style="overflow: hidden">
+    <div class="card">
+      <h5 class="card-header">Existing Requests:</h5>
+      <table class="table bg-white">
+        <thead class="bg-dark text-white">
+          <tr>
+            <th scope="col">Product</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for requests in requests %} {% if requests.username == username_ %}
+          <tr>
+            <td>{{ requests.name }}</td>
+            <td>{{ requests.date }}</td>
+          </tr>
+          {% endif %} {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div type="float: left">
+      <div class="card">
+        <h5 class="card-header">Student Orders:</h5>
+        <table class="table bg-white">
+          <thead class="bg-dark text-white">
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Serial Number</th>
+              <th scope="col">Rented by</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rented in rented %} {% if rented.username != username_ %}
+            <tr>
+              <td>{{ rented.name }}</td>
+              <td>{{ rented.SN }}</td>
+              <td>{{ rented.status|cut:"Rented: " }}</td>
+              <td>
+                {% if rented.explanation == 1 and rented.answer == '0' %}
+                <a class="btn btn-secondary btn-sm ml-2 btn-block"
+                  href="{% url 'dashboard-question-answer' rented.name rented.SN %}">Answer </br> Question</a>
+                </br><input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                {%endif %}
+              </td>
+              {% if rented.explanation == 1 and rented.answer == '0' %}
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Please notice</strong>, {{ rented.username }} has a question for item {{rented.name}}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              {% endif %}
+
+              {% endif %} {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="card">
+        <h5 class="card-header">Items in Storage:</h5>
+        <table class="table bg-white">
+          <thead class="bg-dark text-white">
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Product</th>
+              <th scope="col">Category</th>
+              <th scope="col">Available</th>
+              <th scope="col">Action</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for product in product %}
+            <tr>
+              <td><img src="..\..\..\media\{{product.photo}}" width="120" height="80"></td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.available }}</td>
+              <td>
+                {% if product.available > 0 %}
+                <input type="hidden" name="product{{ forloop.counter }}" value="{{ product.name }}">
+                <button class="btn btn-primary btn-sm ml-2 btn-block" type="submit" name="submit_staff_button"
+                  value="{{forloop.counter}}">Make Request</button>
+                </br>
+                </br>
+                
+                <a class="btn btn-success btn-sm ml-2 btn-block"
+                  href="{% url 'dashboard-staff-reserve' product.name %}">Reserve for Myself</a>
+                {% endif %}
+              </br>
+                <a class="btn btn-secondary btn-sm ml-2 btn-block"
+                  href="{% url 'dashboard-staff-reserve-students' product.name %}">Reserve for Students</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div style="clear: both;"></div>
+      <div type="float: left">
+        <div class="card">
+          <h5 class="card-header">Existing Orders:</h5>
+          <table class="table bg-white">
+            <thead class="bg-dark text-white">
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Status</th>
+                <th scope="col">Faulty</th>
+                <th scope="col">Ordered At</th>
+                <th scope="col">Return By</th>
+                <th scope="col">Return</th>
+                <th scope="col">Report Faulty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rented in rented %} {% if rented.username == username_ %}
+              <tr>
+                <td>{{ rented.name }}</td>
+                <td>{{ rented.SN }}</td>
+                <td>{{ rented.status }}</td>
+                <td>{{ rented.faulty }}</td>
+                <td>{{ rented.start_time }}</td>
+                <td>{{ rented.end_time }}</td>
+                <!--<td><input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                <button class="btn btn-info btn-sm ml-2 btn-block" type="submit" name="return_button"
+                  value="{{forloop.counter}}">Return</button>
+              <td><input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                <button class="btn btn-danger btn-sm ml-2 btn-block" type="submit" name="faulty_button"
+                  value="{{forloop.counter}}">Report Faulty</button>
+              </td>-->
+                <td>
+                  <input type="hidden" name="product{{ forloop.counter }}" value="{{ rented.name }};{{ rented.SN }}">
+                  <button class="btn btn-info btn-sm ml-2 btn-block" type="submit" name="return_button"
+                    value="{{forloop.counter}}">Return</button>
+                  </br>
+                </td>
+                <td>
+                  <a class="btn btn-danger btn-sm ml-2 btn-block" href="{% url 'Faults' rented.SN rented.name %}">Report
+                    Faulty</br></a>
+                  </br>
+                </td>
+              </tr>
+              {% endif %} {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <h5 class="card-header">Make a List for my class:</h5>
+        <table class="table bg-white">
+          <thead class="bg-dark text-white">
+            <tr>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <label for="class-name">Class Name:</label>
+            <input type="text" id="class-name" name="class_name" placeholder="Enter a class name">
+            {% for product in product %} <input type="checkbox" name="{{ product.name }}" value="{{ product.name }}"
+              id="{{ product.name }}" style="transform: scale(1.5); margin-right: 10px; margin-top: 20px;">
+            <label for="{{ product.name }}">{{ product.name }}</label><br>
+            <img src="..\..\..\media\{{product.photo}}" width="120" height="80">
+            {% endfor %}
+            <button class="btn btn-primary" type="submit" name="list_button">Make the
+              List</button>
+        </table>
+      </div>
+  </div>
+  </form>
+</div>
+</div>

@@ -1,0 +1,27 @@
+{% extends 'partials/base.html' %}
+{% block title %}Chat Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col-md-6 offset-md-3 p-3 bg-white">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="card">
+                <h5 class="card-header">Chat with {{sender}}:</h5>
+                {% for message in messages %}
+                {% if message.sender == sender %}
+                <text>{{message.sender}} : {{message.content}}</text>
+                {% else %}
+                <text> You : {{message.content}}</text>
+                {% endif%}
+                {%endfor%}
+                <div class="form-group mt-3">
+                    <input type="text" class="form-control" name="message" placeholder="Enter your message">
+                </div>
+                <button type="submit" class="btn btn-primary">Send</button>
+              </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

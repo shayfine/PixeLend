@@ -1,0 +1,71 @@
+{% extends 'partials/base.html' %}
+{% block title %}Chat Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row my-4">
+    <div class="col-md-6 offset-md-3 p-3 bg-white">
+        <form method="POST">
+            {% csrf_token %}
+            <div class="card">
+                <h5 class="card-header">Existing Chats: &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 
+                  <button class="btn btn-primary btn" type="submit" name="show_button">Start New Chat</button></h5>
+                <table class="table bg-white">
+                  <thead class="bg-dark text-white">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for sender in senders %}
+                    <tr>
+                      <td>{{ sender.sender }}</td>
+                      <td valign="middle">
+                        <input type="hidden" name="product{{ forloop.counter }}" value="{{ sender.sender }}">
+                      <button class="btn btn-primary btn-sm " type="submit" name="submit_button"
+                        value="{{ forloop.counter }}">Open</button>
+                      </td>
+                      <td> 
+                        {% for sender_unread in sendersunread %}
+                        {% if sender.sender == sender_unread.sender %}
+                        New Message!
+                        {% endif %}
+                        {% endfor %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% if new_chat %}
+            </br>
+              <div class="card">
+                <h5 class="card-header">Pick a User:</h5>
+                <table class="table bg-white">
+                  <thead class="bg-dark text-white">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for user in users %}
+                    <tr>
+                      <td>{{ user.username }}</td>
+                      <td valign="middle">
+                        <input type="hidden" name="chat{{ forloop.counter }}" value="{{ user.username }}">
+                      <button class="btn btn-primary btn-sm " type="submit" name="new_chat_button"
+                        value="{{ forloop.counter }}">Start</button>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

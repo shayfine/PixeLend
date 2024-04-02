@@ -1,0 +1,88 @@
+<div class="row">
+    <div class="col-md-4 mt-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                About Us
+            </div>
+            <div class="card-body" style="height: 310px;">
+                <!--  <marquee behavior="" direction=""> -->
+                <h2 class=" my-2">Welcome to PixeLend <h5>Borrowing equipment has never been easier.</h5>
+                </h2>
+                <!--  </marquee> -->
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mt-4">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                Dashboard Statistics
+            </div>
+            <div class="card-body" style="height: 310px;">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <a class="text-decoration-none text-dark" href="{% url 'dashboard-customers' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Users <i class="fas fa-users"></i></h4>
+                                    <h3>{{ customer_count }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="text-decoration-none text-dark" href="{% url 'dashboard-products' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Items <i class="fas fa-box"></i></h4>
+                                    <h3>{{ product_count }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="text-decoration-none text-dark" href="{% url 'dashboard-order' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Orders <i class="fas fa-shipping-fast"></i></h4>
+                                    <h3>{{ rented_count }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <a class="text-decoration-none text-dark" href="{% url 'dashboard-requests' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Order </br> Requests <i class="fas fa-users"></i></h4>
+                                    <h3>{{ request_count }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="text-decoration-none text-dark" href="{% url 'stock-requests-show' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Stock </br> Requests <i class="fas fa-users"></i></h4>
+                                    <h3>{{ stock_count }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a class="text-decoration-none text-dark" href="{% url 'dashboard-faults-show' %}">
+                            <div class="card my-card shadow">
+                                <div class="card-body text-center">
+                                    <h4>Faults </br> Tracking<i class="fas fa-users"></i></h4>
+                                    <h3>{{ faults_count }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

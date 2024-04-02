@@ -1,0 +1,36 @@
+
+{% extends 'partials/base.html' %}
+{% block title %}Faults Display{% endblock %}
+
+
+{% block content %}
+{% include 'partials/topside.html' %}
+<div class="row my-4">
+    <div class="col-md-4"></div>
+    <div class="col-md-8">
+        <table class="table bg-white">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">SN</th>
+                    <th scope="col">Reported At</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for faults in faults %}
+                <tr>
+                    <td>{{ faults.product_name}}</td>
+                    <td>{{ faults.SN }}</td>
+                    <td>{{ faults.report_time }}</td>
+                    <td>{{ faults.category }}</td>
+                    <td>{{ faults.fault_description }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

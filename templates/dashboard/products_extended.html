@@ -1,0 +1,36 @@
+{% extends 'partials/base.html' %}
+{% block title %}Item's Page{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-md-8">
+    <table class="table bg-white">
+        <thead class="bg-dark text-white">
+            <tr>
+                <th scope="col">Product</th>
+                <th scope="col">SN</th>
+                <th scope="col">Status</th>
+                <th scope="col">Faulty</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_item in product %}
+            <tr>
+                <td>{{ product_item.name }}</td>
+                <td>{{ product_item.SN }}</td>
+                <td>{{ product_item.status }}</td>
+                <td>{{ product_item.faulty }}</td>
+                <td style="text-align: center">
+                    <a class="btn btn-info btn-sm ml-2 btn-block"
+                        href="{% url 'dashboard-products-extended-edit' product_item.id %}">Edit</a>
+                    <br>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

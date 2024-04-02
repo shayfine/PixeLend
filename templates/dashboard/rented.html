@@ -1,0 +1,100 @@
+{% extends 'partials/base.html' %}
+{% block title %}Order Page{% endblock %}
+
+{% block content %}
+{% include 'partials/topside.html' %}
+<div class="col-md-14">
+  <div class="row my-4">
+    <div class="col-md-6">
+      <div class="card">
+        <h5 class="card-header">Staff's Table:</h5>
+        <div style="position: relative; left: -20px;">
+          <table class="table bg-white" style="transform: scale(0.9); text-align: center;">
+            <thead class="bg-dark text-white">
+              <tr>
+                <th scope="col">Product</th>
+                <th scope="col">Rented by</th>
+                <th scope="col">Serial Number</th>
+                <th scope="col">Status</th>
+                <th scope="col">Faulty</th>
+                <th scope="col">Order Time</th>
+                <th scope="col">Return By</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rental in rented %}
+              {% for user in stafflist %}
+              {% if user.username == rental.username %}
+              <tr>
+                <td>{{ rental.name }}</td>
+                <td>{{ rental.username }}</td>
+                <td>{{ rental.SN }}</td>
+                <td>{{ rental.status }}</td>
+                <td>{{ rental.faulty }}</td>
+                <td>{{ rental.start_time }}</td>
+                <td>{{ rental.end_time }}</td>
+                {% if rental.end_time < curr_time %} <div class="alert alert-danger alert-dismissible fade show "
+                  role="alert" style="position: relative; top: 10px; left: 20px;">
+                  <strong>Please notice</strong>, {{ rental.name }} is overdue!
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+        </div>
+        {% endif %}
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <h5 class="card-header">Student's Table:</h5>
+      <div style="position: relative; left: -20px;">
+        <table class="table bg-white" style="transform: scale(0.9); text-align: center;">
+          <thead class="bg-dark text-white">
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Rented by</th>
+              <th scope="col">Serial Number</th>
+              <th scope="col">Status</th>
+              <th scope="col">Faulty</th>
+              <th scope="col">Order Time</th>
+              <th scope="col">Return By</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rental in rented %}
+            {% for user in studentlist %}
+            {% if user.username == rental.username %}
+            <tr>
+              <td>{{ rental.name }}</td>
+              <td>{{ rental.username }}</td>
+              <td>{{ rental.SN }}</td>
+              <td>{{ rental.status }}</td>
+              <td>{{ rental.faulty }}</td>
+              <td>{{ rental.start_time }}</td>
+              <td>{{ rental.end_time }}</td>
+              {% if rental.end_time < curr_time %} <div class="alert alert-danger alert-dismissible fade show"
+                role="alert" style="position: relative; top: 10px; left: 20px;">
+                <strong>Please notice</strong>, the return time for {{ rental.name }} SN:{{ rental.SN }} has passed!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+      </div>
+      {% endif %}
+      </tr>
+      {% endif %}
+      {% endfor %}
+      {% endfor %}
+      </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %}

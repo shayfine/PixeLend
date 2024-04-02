@@ -1,0 +1,69 @@
+{% extends 'partials/base.html' %}
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated and user.is_staff and user.is_superuser %}
+{% include 'partials/topside.html' %}
+<div class="row">
+    <div class="col-md-8 my-4 offset-md-2">
+        <div class="bg-white">
+            <div class="card-body" style="text-align: center;">
+                <canvas id="myChart1" width="800" height="300"></canvas>
+                <script>
+                    var ctx = document.getElementById('myChart1').getContext('2d');
+                    var myChart1 = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [{% for product in product %} '{{product.name}}', {% endfor %}],
+                    datasets: [{
+                        label: 'Number of Products',
+                        data: [{% for product in product %} {{ product.quantity }}, {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                                borderWidth: 1
+                    }]
+                        },
+                    options: {
+                        title: {
+                            display: true,
+                                text: 'Number of Products'
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elif user.is_authenticated and user_in_group %}
+{% include 'dashboard/staff_index.html' %}
+{% else %}
+{% include 'dashboard/customer_index.html' %}
+{% endif%}
+
+{% endblock %}
